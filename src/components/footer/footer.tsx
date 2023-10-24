@@ -1,4 +1,4 @@
-function Footer(): JSX.Element {
+export default function Footer(): JSX.Element {
   return (
     <footer className="footer">
       <a className="footer__logo-link" href="main.html">
@@ -13,5 +13,3 @@ function Footer(): JSX.Element {
     </footer>
   );
 }
-
-export default Footer;

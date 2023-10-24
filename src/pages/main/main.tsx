@@ -2,7 +2,7 @@ import { AppProps } from '../../components/app/app';
 import Header from '../../components/header/header';
 import Card from '../../components/card/card';
 
-function Main({ placesCount }: AppProps): JSX.Element {
+export default function Main({ placesCount }: AppProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
       <Header />
@@ -124,5 +124,3 @@ function Main({ placesCount }: AppProps): JSX.Element {
     </div>
   );
 }
-
-export default Main;
