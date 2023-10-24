@@ -1,6 +1,6 @@
 import Header from '../../components/header/header';
 
-function Offer(): JSX.Element {
+export default function Offer(): JSX.Element {
   return (
     <div className="page">
       <Header />
@@ -429,4 +429,3 @@ function Offer(): JSX.Element {
     </div>
   );
 }
-export default Offer;

@@ -1,4 +1,4 @@
-function Header(): JSX.Element {
+export default function Header(): JSX.Element {
   return (
     <header className="header">
       <div className="container">
@@ -37,4 +37,3 @@ function Header(): JSX.Element {
     </header>
   );
 }
-export default Header;

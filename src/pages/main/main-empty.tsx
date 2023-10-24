@@ -1,6 +1,6 @@
 import Header from '../../components/header/header';
 
-function MainEmpty(): JSX.Element {
+export default function MainEmpty(): JSX.Element {
   return (
     <div className="page page--gray page--main">
       <Header />
@@ -63,5 +63,3 @@ function MainEmpty(): JSX.Element {
     </div>
   );
 }
-
-export default MainEmpty;

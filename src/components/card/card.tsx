@@ -7,7 +7,7 @@ type CardProps = {
   premium?: string;
 };
 
-function Card({src, price, rating, name, type, premium}: CardProps): JSX.Element {
+export default function Card({src, price, rating, name, type, premium}: CardProps): JSX.Element {
   return (
     <article className="cities__card place-card">
       <div className="place-card__mark">
@@ -58,5 +58,3 @@ function Card({src, price, rating, name, type, premium}: CardProps): JSX.Element
     </article>
   );
 }
-
-export default Card;
