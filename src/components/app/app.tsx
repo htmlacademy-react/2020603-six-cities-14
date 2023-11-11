@@ -1,43 +1,53 @@
-import Favorites from '../../pages/favorites/favorites';
-import Login from '../../pages/login/login';
-import Main from '../../pages/main/main';
-import NotFound from '../../pages/not-found/not-found';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import { AppRoute, AutoriztionStatus } from '../../const';
 import PrivateRoute from '../private-route/private-route';
-import { AppRoute, AuthorizationStatus } from '../../const';
-import Offer from '../../pages/offer/offer';
+import { Offer } from '../../types';
+import HomePage from '../../pages/home-page/home-page';
+import ErrorPage from '../../pages/error-page/error-page';
+import FavoritesPage from '../../pages/favorites-page/favorites-page';
+import LoginPage from '../../pages/login-page/login-page';
+import OfferPage from '../../pages/offer-page/offer-page';
 
-export type AppProps = {
-  placesCount: number;
+
+type AppProps = {
+  offers: Offer[];
+  favoritesOffers: Offer[];
 }
 
-export default function App(props: AppProps): JSX.Element {
+function App(props: AppProps): JSX.Element {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={AppRoute.Main} element={<Main {...props} />} />
-        <Route path={AppRoute.Login} element={<Login />} />
-        <Route
-          path='/favorites'
-          element={
-            <PrivateRoute authorizationStatus={AuthorizationStatus.NoAuth}>
-              <Favorites />
-            </PrivateRoute>
-          }
-        />
-        <Route path={AppRoute.Offer}>
-          <Route index element={<Offer />} />
-          <Route path={AppRoute.OfferId} element={<Offer />} />
-        </Route>
-        <Route path={AppRoute.Error} element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
-    // <Main {...props} />
+    <HelmetProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path={AppRoute.Main}
+            element={<HomePage {...props} />}
+          />
+          <Route
+            path={AppRoute.Favorites}
+            element={
+              <PrivateRoute autoriztionStatus={AutoriztionStatus.Auth}>
+                <FavoritesPage favoritesOffers={props.favoritesOffers} />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={AppRoute.Login}
+            element={<LoginPage />}
+          />
+          <Route
+            path={`${AppRoute.Offer}:id`}
+            element={<OfferPage />}
+          />
+          <Route
+            path={AppRoute.Error}
+            element={<ErrorPage />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 
-// export default function App({ placesCount }: AppProps): JSX.Element {
-//   return (
-//     <Main placesCount={placesCount} />
-//   );
-// }
+export default App;

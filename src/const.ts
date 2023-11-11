@@ -1,19 +1,21 @@
-// export const Data = {
-//   PlacesCount: 312
-// } as const;
-
-export const PLACES_COUNT = 312;
-
 export enum AppRoute {
   Main = '/',
   Login = '/login',
   Favorites = '/favorites',
-  Offer = '/offer',
-  OfferId = ':id',
+  Offer = '/offer/',
   Error = '*',
 }
 
-export enum AuthorizationStatus {
+export enum CityName {
+  Paris = 'Paris',
+  Cologne = 'Cologne',
+  Brussels = 'Brussels',
+  Amsterdam = 'Amsterdam',
+  Hamburg = 'Hamburg',
+  Dusseldorf = 'Dusseldorf',
+}
+
+export enum AutoriztionStatus {
   Auth = 'AUTH',
   NoAuth = 'NO_AUTH',
   Unknown = 'UNKNOWN'
