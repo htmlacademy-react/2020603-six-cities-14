@@ -1,14 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Offer } from './types';
+import { SERVER_OFFERS_URL } from './server';
+import { favoritesOffers } from './mocks/favorites';
 import App from './components/app/app';
-import { PLACES_COUNT } from './const';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
+const offers: Offer[] = await fetch(SERVER_OFFERS_URL)
+  .then((response) => response.json())
+  .then((res: Offer[]) => res);
+
 root.render(
   <React.StrictMode>
-    <App placesCount={PLACES_COUNT}/>
+    <App offers={offers} favoritesOffers={favoritesOffers}/>
   </React.StrictMode>
 );
