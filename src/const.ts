@@ -2,11 +2,16 @@ export enum AppRoute {
   Main = '/',
   Login = '/login',
   Favorites = '/favorites',
-  Offer = '/offer/',
-  Error = '*',
+  Offer = '/offer/'
 }
 
-export enum CityName {
+export enum AutoriztionStatus {
+  Auth = 'AUTH',
+  NoAuth = 'NO_AUTH',
+  Unknown = 'UNKNOWN'
+}
+
+export enum Cities {
   Paris = 'Paris',
   Cologne = 'Cologne',
   Brussels = 'Brussels',
@@ -15,8 +20,5 @@ export enum CityName {
   Dusseldorf = 'Dusseldorf',
 }
 
-export enum AutoriztionStatus {
-  Auth = 'AUTH',
-  NoAuth = 'NO_AUTH',
-  Unknown = 'UNKNOWN'
-}
+export const URL_MARKER_DEFAULT = 'src/static/pin.svg';
+export const URL_MARKER_ACTIVE = 'src/static/pin-active.svg';

@@ -1,14 +1,13 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
-import { AppRoute, AutoriztionStatus } from '../../const';
-import PrivateRoute from '../private-route/private-route';
-import { Offer } from '../../types';
 import HomePage from '../../pages/home-page/home-page';
 import ErrorPage from '../../pages/error-page/error-page';
 import FavoritesPage from '../../pages/favorites-page/favorites-page';
 import LoginPage from '../../pages/login-page/login-page';
 import OfferPage from '../../pages/offer-page/offer-page';
-
+import PrivateRoute from '../private-route/private-route';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import { AppRoute, AutoriztionStatus } from '../../const';
+import { Offer } from '../../types';
 
 type AppProps = {
   offers: Offer[];
@@ -41,7 +40,7 @@ function App(props: AppProps): JSX.Element {
             element={<OfferPage />}
           />
           <Route
-            path={AppRoute.Error}
+            path='*'
             element={<ErrorPage />}
           />
         </Routes>
