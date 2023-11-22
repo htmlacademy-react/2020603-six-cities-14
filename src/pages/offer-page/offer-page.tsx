@@ -6,7 +6,7 @@ function OfferPage(): JSX.Element {
   return (
     <div className="page">
       <Helmet>
-        <title>6 городов - страница предложения</title>
+        <title>6 городов - страница отеля</title>
       </Helmet>
       <Header />
 

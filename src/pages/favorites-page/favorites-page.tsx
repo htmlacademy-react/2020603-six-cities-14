@@ -1,7 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { Offer } from '../../types';
 import Header from '../../components/header/header';
-import Footer from '../../components/footer/footer';
 import OfferCard from '../../components/offer-card/offer-card';
 
 type FavoritesPageProps = {
@@ -50,7 +49,11 @@ function FavoritesPage({favoritesOffers}: FavoritesPageProps): JSX.Element {
           </section>
         </div>
       </main>
-      <Footer />
+      <footer className="footer container">
+        <a className="footer__logo-link" href="main.html">
+          <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
+        </a>
+      </footer>
     </div>
   );
 }
