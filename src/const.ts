@@ -24,19 +24,22 @@ export type CityName = typeof Cities[number];
 
 export const enum MarkersUrls {
   Default = 'src/static/pin.svg',
-  Active = 'src/static/pin-active.svg'
+  Active = 'src/static/pin-active.svg',
 }
 
 export enum NameSpace {
   Offers = 'OFFERS',
   City = 'CITY',
   AuthorizationStatus = 'AUTORIZATION_STATUS',
-  User = 'USER'
+  User = 'USER',
 }
 
 export enum SortingOptions {
   POPULAR = 'Popular',
   PRICE_LOW_TO_HIGH = 'Price: low to high',
   PRICE_HIGH_TO_LOW = 'Price: high to low',
-  TOP_RATED_FIRST = 'Top rated first'
+  TOP_RATED_FIRST = 'Top rated first',
 }
+
+export const ERROR_STATUS_CODE = 404;
+export const ERROR_ROUTE = '404';
