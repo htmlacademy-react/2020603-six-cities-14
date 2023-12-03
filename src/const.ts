@@ -24,7 +24,7 @@ export type CityName = typeof Cities[number];
 
 export const enum MarkersUrls {
   Default = 'src/static/pin.svg',
-  Active = 'src/static/pin-active.svg',
+  Active = 'src/static/pin-active.svg'
 }
 
 export enum NameSpace {
@@ -32,6 +32,7 @@ export enum NameSpace {
   City = 'CITY',
   AuthorizationStatus = 'AUTORIZATION_STATUS',
   User = 'USER',
+  Favorites = 'FAVORITES'
 }
 
 export enum SortingOptions {
