@@ -17,14 +17,14 @@ export const cities = [
   'Brussels',
   'Amsterdam',
   'Hamburg',
-  'Dusseldorf',
+  'Dusseldorf'
 ] as const;
 
 export type CityName = typeof cities[number];
 
 export const enum MarkerUrl {
   Default = 'src/static/pin.svg',
-  Active = 'src/static/pin-active.svg',
+  Active = 'src/static/pin-active.svg'
 }
 
 export enum NameSpace {
@@ -32,14 +32,14 @@ export enum NameSpace {
   City = 'CITY',
   AuthorizationStatus = 'AUTORIZATION_STATUS',
   User = 'USER',
-  Favorites = 'FAVORITES',
+  Favorites = 'FAVORITES'
 }
 
 export enum SortingOption {
   Popular = 'Popular',
   PriceLowToHigh = 'Price: low to high',
   PriceHighToLow = 'Price: high to low',
-  TopRatedFirst = 'Top rated first',
+  TopRatedFirst = 'Top rated first'
 }
 
 export const ERROR_STATUS_CODE = 404;
