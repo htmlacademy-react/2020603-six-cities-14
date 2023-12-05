@@ -11,20 +11,20 @@ export enum AuthStatus {
   Unknown = 'UNKNOWN'
 }
 
-export const Cities = [
+export const cities = [
   'Paris',
   'Cologne',
   'Brussels',
   'Amsterdam',
   'Hamburg',
-  'Dusseldorf',
+  'Dusseldorf'
 ] as const;
 
-export type CityName = typeof Cities[number];
+export type CityName = typeof cities[number];
 
-export const enum MarkersUrls {
+export const enum MarkerUrl {
   Default = 'src/static/pin.svg',
-  Active = 'src/static/pin-active.svg',
+  Active = 'src/static/pin-active.svg'
 }
 
 export enum NameSpace {
@@ -32,14 +32,14 @@ export enum NameSpace {
   City = 'CITY',
   AuthorizationStatus = 'AUTORIZATION_STATUS',
   User = 'USER',
-  Favorites = 'FAVORITES',
+  Favorites = 'FAVORITES'
 }
 
-export enum SortingOptions {
-  POPULAR = 'Popular',
-  PRICE_LOW_TO_HIGH = 'Price: low to high',
-  PRICE_HIGH_TO_LOW = 'Price: high to low',
-  TOP_RATED_FIRST = 'Top rated first',
+export enum SortingOption {
+  Popular = 'Popular',
+  PriceLowToHigh = 'Price: low to high',
+  PriceHighToLow = 'Price: high to low',
+  TopRatedFirst = 'Top rated first'
 }
 
 export const ERROR_STATUS_CODE = 404;
