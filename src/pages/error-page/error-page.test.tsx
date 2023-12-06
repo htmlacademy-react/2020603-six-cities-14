@@ -6,8 +6,8 @@ import { makeFakeStore } from '../../utils/mocks';
 describe('Component: ErrorPage', () => {
   it('should render correctly', () => {
     const fakeStore = makeFakeStore({});
-    const expectedMainText = '404 Not Found';
-    const expectedLinkText = 'На главную';
+    const expectedMainText = 'Page not found';
+    const expectedLinkText = 'Go back to the main page';
     const { withStoreComponent } = withStore(withHistory(<ErrorPage />), fakeStore);
 
     render(withStoreComponent);
