@@ -1,10 +1,10 @@
-import { combineReducers } from '@reduxjs/toolkit';
 import { NameSpace } from '../const';
-import { offersData } from './offers-data/offers-data';
-import { cityData } from './city-data/city-data';
+import { combineReducers } from '@reduxjs/toolkit';
 import { autorizationData } from './autorization-status-data/autorization-status';
 import { userInfoData } from './user-data/user-data';
-import { favoritesData } from './favotites-data/favorites-data';
+import { offersData } from './offers-data/offers-data';
+import { cityData } from './city-data/city-data';
+import { favoritesData } from './favorites-data/favorites-data';
 
 export const rootReducer = combineReducers({
   [NameSpace.Offers]: offersData.reducer,

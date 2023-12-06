@@ -1,22 +1,13 @@
+import { AuthStatus, cities } from '../const';
+import { createApi } from '../api/api';
 import { name, internet, lorem, datatype, random, image, date } from 'faker';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'redux';
 import { Offer, City, Location, User, AuthData, Comment } from '../types';
 import { UserInfo, State } from '../types/state';
-import { AuthStatus, cities } from '../const';
-import { createApi } from '../api/api';
 
 export type AppThunkDispatch = ThunkDispatch<State, ReturnType<typeof createApi>, Action>;
 export const extractActionsTypes = (actions: Action<string>[]) => actions.map(({ type }) => type);
-
-export const makeFakeUserInfo = (): UserInfo => ({
-  avatarUrl: internet.avatar(),
-  email: internet.email(),
-  id: datatype.number({ min: 1, max: 100 }),
-  isPro: datatype.boolean(),
-  name: name.firstName(),
-  token: datatype.uuid(),
-} as UserInfo);
 
 export const makeFakeLocation = (): Location => ({
   latitude: datatype.number({ min: -90, max: 90, precision: 0.000001 }),
@@ -68,18 +59,14 @@ export const makeFakeOffer = (): Offer => ({
   type: lorem.word(),
 } as Offer);
 
-export const makeFakeAuthData = (): AuthData => ({
-  login: lorem.word(),
-  password: internet.password(),
-} as AuthData);
-
-export const makeFakeComment = (): Comment => ({
-  comment: lorem.paragraph(),
-  date: new Date(date.recent()).toLocaleString(),
+export const makeFakeUserInfo = (): UserInfo => ({
+  avatarUrl: internet.avatar(),
+  email: internet.email(),
   id: datatype.number({ min: 1, max: 100 }),
-  rating: datatype.number({ min: 1, max: 5, precision: 0.1 }),
-  user: makeFakeHost(),
-} as Comment);
+  isPro: datatype.boolean(),
+  name: name.firstName(),
+  token: datatype.uuid(),
+} as UserInfo);
 
 export const makeFakeStore = (initialState?: Partial<State>): State => ({
   AUTORIZATION_STATUS: { authorizationStatus: AuthStatus.Unknown },
@@ -97,3 +84,16 @@ export const makeFakeStore = (initialState?: Partial<State>): State => ({
   },
   ...initialState ?? {},
 });
+
+export const makeFakeAuthData = (): AuthData => ({
+  login: lorem.word(),
+  password: internet.password(),
+} as AuthData);
+
+export const makeFakeComment = (): Comment => ({
+  comment: lorem.paragraph(),
+  date: new Date(date.recent()).toLocaleString(),
+  id: datatype.number({ min: 1, max: 100 }),
+  rating: datatype.number({ min: 1, max: 5, precision: 0.1 }),
+  user: makeFakeHost(),
+} as Comment);

@@ -2,8 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useSelector } from 'react-redux';
-import { useAppDispatch } from '../../hooks';
 import { AppRoute, CityName } from '../../const';
+import { useAppDispatch } from '../../hooks';
 import { getRandomCity } from '../../utils';
 import { loginAction } from '../../store/api-actions';
 import { getAuthorizationStatus } from '../../store/autorization-status-data/selectors';
@@ -32,11 +32,20 @@ function LoginPage(): JSX.Element {
     }
   };
 
-  const checkIsValid = () => {
-    const login = loginRef.current?.value.trim();
-    const password = passwordRef.current?.value.trim();
+  const handleCityClick = (evt: React.MouseEvent) => {
+    evt.preventDefault();
 
-    if(!password || !login) {
+    if (activeCity) {
+      dispatch(updateCity(activeCity));
+      navigate(AppRoute.Main);
+    }
+  };
+
+  const checkIsValid = () => {
+    const login = loginRef.current?.value;
+    const password = passwordRef.current?.value;
+
+    if(!password || !login || /\s/g.test(password)) {
       setIsValid(false);
       return;
     }
@@ -45,15 +54,6 @@ function LoginPage(): JSX.Element {
 
     const isValidForm = re.test(password);
     setIsValid(isValidForm);
-  };
-
-  const handleCityClick = (evt: React.MouseEvent) => {
-    evt.preventDefault();
-
-    if (activeCity) {
-      dispatch(updateCity(activeCity));
-      navigate(AppRoute.Main);
-    }
   };
 
   useEffect(() => {
@@ -72,7 +72,7 @@ function LoginPage(): JSX.Element {
   return (
     <div className="page page--gray page--login">
       <Helmet>
-        <title>6 городов - логин</title>
+        <title>6 sities - Login Page</title>
       </Helmet>
       <header className="header">
         <div className="container">

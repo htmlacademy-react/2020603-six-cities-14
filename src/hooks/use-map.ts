@@ -1,7 +1,7 @@
-import leaflet from 'leaflet';
 import React from 'react';
-import { useState, useEffect, useRef } from 'react';
+import leaflet from 'leaflet';
 import { City } from '../types';
+import { useState, useEffect, useRef } from 'react';
 
 function useMap(mapRef: React.MutableRefObject<null>, city: City) {
   const [map, setMap] = useState<leaflet.Map | null>(null);

@@ -35,6 +35,11 @@ export type User = {
   name: string;
 }
 
+export type AuthData = {
+  login: string;
+  password: string;
+};
+
 export type Comment = {
   comment: string;
   date: string;
@@ -42,11 +47,6 @@ export type Comment = {
   rating: number;
   user: User;
 }
-
-export type AuthData = {
-  login: string;
-  password: string;
-};
 
 export type Review = {
   comment: string;

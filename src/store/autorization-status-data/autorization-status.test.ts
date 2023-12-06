@@ -2,8 +2,8 @@ import { autorizationData } from './autorization-status';
 import { checkAuthAction, loginAction, logoutAction } from '../api-actions';
 import { AutorizationData } from '../../types/state';
 import { AuthStatus } from '../../const';
-import { makeFakeAuthData } from '../../utils/mocks';
 import { AuthData } from '../../types';
+import { makeFakeAuthData } from '../../utils/mocks';
 
 describe('Offers data slice', () => {
   it('should return initial state after empty action', () => {

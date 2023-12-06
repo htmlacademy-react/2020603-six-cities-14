@@ -1,14 +1,14 @@
-import { useMemo } from 'react';
+import Header from '../../components/header/header';
+import OfferCards from '../../components/offer-cards/offer-cards';
 import { Helmet } from 'react-helmet-async';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { Offer } from '../../types';
 import { useAppDispatch } from '../../hooks';
 import { AppRoute } from '../../const';
 import { fetchFavoritesAction } from '../../store/api-actions';
-import { getFavorites } from '../../store/favotites-data/selectors';
-import Header from '../../components/header/header';
-import OfferCards from '../../components/offer-cards/offer-cards';
+import { getFavorites } from '../../store/favorites-data/selectors';
 
 function FavoritesPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -35,7 +35,7 @@ function FavoritesPage(): JSX.Element {
   return (
     <div className="page">
       <Helmet>
-        <title>6 городов - избранное</title>
+        <title>6 sities - Favorites Page</title>
       </Helmet>
       <Header />
 
@@ -62,7 +62,7 @@ function FavoritesPage(): JSX.Element {
                         </div>
                       </div>
                       <div className="favorites__places">
-                        <OfferCards offers={computedFavoriteOffers[city]} cardType="favorite" handleFavoriteToggling={updateFavorites} />
+                        <OfferCards offers={computedFavoriteOffers[city]} cardType="favorite" onHandleFavoriteToggling={updateFavorites} />
                       </div>
                     </li>
                   ))}

@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks';
+import { useSelector } from 'react-redux';
 import { AppRoute, AuthStatus } from '../../const';
 import { logoutAction } from '../../store/api-actions';
-import { useSelector } from 'react-redux';
 import { getAuthorizationStatus } from '../../store/autorization-status-data/selectors';
 import { getUserInfo } from '../../store/user-data/selectors';
-import { getFavorites } from '../../store/favotites-data/selectors';
+import { getFavorites } from '../../store/favorites-data/selectors';
 import { updateUserInfo } from '../../store/user-data/user-data';
+import { updateFavoriteOffers } from '../../store/favorites-data/favorites-data';
 
 export default function Header(): JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
@@ -18,6 +19,7 @@ export default function Header(): JSX.Element {
   const handleLogout = () => {
     dispatch(logoutAction());
     dispatch(updateUserInfo(null));
+    dispatch(updateFavoriteOffers([]));
   };
 
   return (

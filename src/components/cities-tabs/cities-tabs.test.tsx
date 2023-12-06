@@ -1,9 +1,9 @@
+import CitiesTabs from './cities-tabs';
 import { random } from 'faker';
 import { render, screen } from '@testing-library/react';
 import { cities } from '../../const';
 import { withStore } from '../../utils/mock-component';
 import { makeFakeStore } from '../../utils/mocks';
-import CitiesTabs from './cities-tabs';
 
 describe('Component: CitiesTabs', () => {
   it('should render correctly', () => {

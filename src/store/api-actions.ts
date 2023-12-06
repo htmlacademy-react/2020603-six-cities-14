@@ -2,9 +2,9 @@ import { AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, State, UserInfo } from '../types/state';
 import { Offer, AuthData } from '../types';
-import { ApiUrl } from '../api/urls';
 import { saveToken, dropToken } from '../token/token';
 import { redirectToRoute } from './actions';
+import { ApiUrl } from '../api/urls';
 import { AppRoute } from '../const';
 import { updateUserInfo } from './user-data/user-data';
 
@@ -59,6 +59,7 @@ export const loginAction = createAsyncThunk<void, AuthData, {
       saveToken(data.token);
       dispatch(redirectToRoute(AppRoute.Favorites));
       dispatch(updateUserInfo(data));
+      dispatch(fetchFavoritesAction());
     }
   },
 );
@@ -84,6 +85,7 @@ export const addFavoritesAction = createAsyncThunk<Offer, Offer, {
   async (favoriteOffer, {extra: api}) => {
     const { id } = favoriteOffer;
     const { data } = await api.post<Offer>(`${ApiUrl.Favorites}/${id}/1`);
+
     return data;
   },
 );
