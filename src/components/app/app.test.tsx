@@ -52,6 +52,6 @@ describe('Application Routing', () => {
 
     render(withStoreComponent);
 
-    expect(screen.getByText('404 Not Found')).toBeInTheDocument();
+    expect(screen.getByText('Page not found')).toBeInTheDocument();
   });
 });
