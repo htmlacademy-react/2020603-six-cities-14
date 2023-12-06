@@ -1,17 +1,17 @@
-import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
+import * as tokenStorage from '../token/token';
+import { configureMockStore } from '@jedmao/redux-mock-store';
 import { Action } from 'redux';
 import { createApi } from '../api/api';
 import { ApiUrl } from '../api/urls';
-import { cities } from '../const';
 import { State } from '../types/state';
 import { AuthData } from '../types';
+import { cities } from '../const';
 import { redirectToRoute } from './actions';
-import * as tokenStorage from '../token/token';
 import { updateUserInfo } from './user-data/user-data';
-import { checkAuthAction, fetchOffersAction, fetchFavoritesAction, addFavoritesAction, removeFavoritesAction, loginAction, logoutAction } from './api-actions';
-import { AppThunkDispatch, extractActionsTypes, makeFakeOffer } from '../utils/mocks';
+import { checkAuthAction, fetchOffersAction, fetchFavoritesAction, loginAction, logoutAction, addFavoritesAction, removeFavoritesAction } from './api-actions';
+import { AppThunkDispatch, makeFakeOffer, extractActionsTypes } from '../utils/mocks';
 
 describe('Async actions', () => {
   const axios = createApi();
@@ -21,7 +21,12 @@ describe('Async actions', () => {
   let store: ReturnType<typeof mockStoreCreator>;
 
   beforeEach(() => {
-    store = mockStoreCreator({ OFFERS: { offers: [] }, FAVORITES: { favoriteOffers: [] }, USER: { user: null }, CITY: { city: cities[0]}});
+    store = mockStoreCreator({
+      OFFERS: { offers: [] },
+      FAVORITES: { favoriteOffers: [] },
+      USER: { user: null },
+      CITY: { city: cities[0] }
+    });
   });
 
   describe('checkAuthAction', () => {
@@ -150,6 +155,61 @@ describe('Async actions', () => {
     });
   });
 
+  describe('loginAction', () => {
+    it('should dispatch "loginAction.pending", "redirectToRoute", "loginAction.fulfilled" when server response 200', async () => {
+      const fakeUser: AuthData = { login: 'test@test.ru', password: '123456' };
+      const fakeServerReplay = { token: 'secret' };
+      mockAdapter.onPost(ApiUrl.Login).reply(200, fakeServerReplay);
+
+      await store.dispatch(loginAction(fakeUser));
+      const actions = extractActionsTypes(store.getActions());
+
+      expect(actions).toEqual([
+        loginAction.pending.type,
+        redirectToRoute.type,
+        updateUserInfo.type,
+        fetchFavoritesAction.pending.type,
+        loginAction.fulfilled.type,
+      ]);
+    });
+
+    it('should call "saveToken" once with the received token', async () => {
+      const fakeUser: AuthData = { login: 'test@test.ru', password: '123456' };
+      const fakeServerReplay = { token: 'secret' };
+      mockAdapter.onPost(ApiUrl.Login).reply(200, fakeServerReplay);
+      const mockSaveToken = vi.spyOn(tokenStorage, 'saveToken');
+
+      await store.dispatch(loginAction(fakeUser));
+
+      expect(mockSaveToken).toBeCalledTimes(1);
+      expect(mockSaveToken).toBeCalledWith(fakeServerReplay.token);
+    });
+
+  });
+
+  describe('logoutAction', () => {
+    it('should dispatch "logoutAction.pending", "logoutAction.fulfilled" when server response 204', async () => {
+      mockAdapter.onDelete(ApiUrl.Logout).reply(204);
+
+      await store.dispatch(logoutAction());
+      const actions = extractActionsTypes(store.getActions());
+
+      expect(actions).toEqual([
+        logoutAction.pending.type,
+        logoutAction.fulfilled.type,
+      ]);
+    });
+
+    it('should one call "dropToken" with "logoutAction"', async () => {
+      mockAdapter.onDelete(ApiUrl.Logout).reply(204);
+      const mockDropToken = vi.spyOn(tokenStorage, 'dropToken');
+
+      await store.dispatch(logoutAction());
+
+      expect(mockDropToken).toBeCalledTimes(1);
+    });
+  });
+
   describe('removeFavoritesAction', () => {
     it('should dispatch "removeFavoritesAction.pending", "removeFavoritesAction.fulfilled", when server response 200', async() => {
       const mockOffer = makeFakeOffer();
@@ -181,60 +241,6 @@ describe('Async actions', () => {
         removeFavoritesAction.pending.type,
         removeFavoritesAction.rejected.type,
       ]);
-    });
-  });
-
-  describe('loginAction', () => {
-    it('should dispatch "loginAction.pending", "redirectToRoute", "loginAction.fulfilled" when server response 200', async() => {
-      const fakeUser: AuthData = { login: 'test@test.ru', password: '123456' };
-      const fakeServerReplay = { token: 'secret' };
-      mockAdapter.onPost(ApiUrl.Login).reply(200, fakeServerReplay);
-
-      await store.dispatch(loginAction(fakeUser));
-      const actions = extractActionsTypes(store.getActions());
-
-      expect(actions).toEqual([
-        loginAction.pending.type,
-        redirectToRoute.type,
-        updateUserInfo.type,
-        loginAction.fulfilled.type,
-      ]);
-    });
-
-    it('should call "saveToken" once with the received token', async () => {
-      const fakeUser: AuthData = { login: 'test@test.ru', password: '123456' };
-      const fakeServerReplay = { token: 'secret' };
-      mockAdapter.onPost(ApiUrl.Login).reply(200, fakeServerReplay);
-      const mockSaveToken = vi.spyOn(tokenStorage, 'saveToken');
-
-      await store.dispatch(loginAction(fakeUser));
-
-      expect(mockSaveToken).toBeCalledTimes(1);
-      expect(mockSaveToken).toBeCalledWith(fakeServerReplay.token);
-    });
-
-  });
-
-  describe('logoutAction', () => {
-    it('should dispatch "logoutAction.pending", "logoutAction.fulfilled" when server response 204', async() => {
-      mockAdapter.onDelete(ApiUrl.Logout).reply(204);
-
-      await store.dispatch(logoutAction());
-      const actions = extractActionsTypes(store.getActions());
-
-      expect(actions).toEqual([
-        logoutAction.pending.type,
-        logoutAction.fulfilled.type,
-      ]);
-    });
-
-    it('should one call "dropToken" with "logoutAction"', async () => {
-      mockAdapter.onDelete(ApiUrl.Logout).reply(204);
-      const mockDropToken = vi.spyOn(tokenStorage, 'dropToken');
-
-      await store.dispatch(logoutAction());
-
-      expect(mockDropToken).toBeCalledTimes(1);
     });
   });
 });

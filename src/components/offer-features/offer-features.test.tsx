@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
 import OfferFeatures from './offer-features';
+import { render, screen } from '@testing-library/react';
 
 describe('Component: OfferFeatures', () => {
   it('should render correctly', () => {

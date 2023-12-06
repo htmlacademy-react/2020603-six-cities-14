@@ -1,3 +1,4 @@
+import Spinner from '../spinner/spinner';
 import { Navigate } from 'react-router-dom';
 import { AuthStatus } from '../../const';
 import { AppRoute } from '../../const';
@@ -11,8 +12,10 @@ export default function PrivateRoute(props: PrivateRouteProps): JSX.Element {
   const { authorizationStatus, children } = props;
 
   return (
-    authorizationStatus === AuthStatus.Auth
-      ? children
-      : <Navigate to={AppRoute.Login} />
+    <>
+      {authorizationStatus === AuthStatus.Unknown && <Spinner></Spinner>}
+      {authorizationStatus === AuthStatus.Auth && children}
+      {authorizationStatus === AuthStatus.NoAuth && <Navigate to={AppRoute.Login}></Navigate>}
+    </>
   );
 }

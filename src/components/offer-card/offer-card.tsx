@@ -1,38 +1,40 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks';
 import { AppRoute, AuthStatus } from '../../const';
+import { useAppDispatch } from '../../hooks';
 import { Offer } from '../../types';
+import { updateOffers } from '../../store/offers-data/offers-data';
 import { getRating } from '../../utils';
 import { useSelector } from 'react-redux';
 import { getAuthorizationStatus } from '../../store/autorization-status-data/selectors';
 import { addFavoritesAction, removeFavoritesAction } from '../../store/api-actions';
+import { capitalizeFirstLetter } from '../../utils';
 
 type OfferCardProps = {
   offer: Offer;
   cardType?: string;
-  updateActiveOffer?: (offer: Offer) => void;
-  clearHoveredOffer?: () => void;
-  toggleFavoriteOffer: () => void;
+  onUpdateActiveOffer?: (offer: Offer) => void;
+  onClearHoveredOffer?: () => void;
+  onToggleFavoriteOffer: () => void;
 }
 
 function getLinkToOffer(id: number) {
   return `${AppRoute.Offer}${id}`;
 }
 
-function OfferCard({ offer, cardType, updateActiveOffer, clearHoveredOffer, toggleFavoriteOffer }: OfferCardProps): JSX.Element {
+function OfferCard({ offer, cardType, onUpdateActiveOffer, onClearHoveredOffer, onToggleFavoriteOffer }: OfferCardProps): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const authorizationStatus = useSelector(getAuthorizationStatus);
 
   function handleMouseHover(): void {
-    if(updateActiveOffer) {
-      updateActiveOffer(offer);
+    if(onUpdateActiveOffer) {
+      onUpdateActiveOffer(offer);
     }
   }
 
   function handleMouseOut(): void {
-    if(clearHoveredOffer) {
-      clearHoveredOffer();
+    if(onClearHoveredOffer) {
+      onClearHoveredOffer();
     }
   }
 
@@ -43,12 +45,9 @@ function OfferCard({ offer, cardType, updateActiveOffer, clearHoveredOffer, togg
     }
 
     const { isFavorite } = favoriteOffer;
-    if (isFavorite) {
-      await dispatch(removeFavoritesAction(favoriteOffer));
-    } else {
-      await dispatch(addFavoritesAction(favoriteOffer));
-    }
-    toggleFavoriteOffer();
+    const { payload } = isFavorite ? await dispatch(removeFavoritesAction(favoriteOffer)) : await dispatch(addFavoritesAction(favoriteOffer));
+    dispatch(updateOffers(payload as Offer));
+    onToggleFavoriteOffer();
   };
 
   return (
@@ -57,7 +56,7 @@ function OfferCard({ offer, cardType, updateActiveOffer, clearHoveredOffer, togg
       onMouseOver={handleMouseHover}
       onMouseOut={handleMouseOut}
       className={
-        `place-card 
+        `place-card
         ${cardType === 'city' ? 'cities__card' : ''}
         ${cardType === 'favorite' ? 'favorites__card' : ''}
         ${cardType === 'near-places' ? 'near-places__card' : ''}`
@@ -70,8 +69,8 @@ function OfferCard({ offer, cardType, updateActiveOffer, clearHoveredOffer, togg
         </div>
       )}
       <div className={
-        `place-card__image-wrapper 
-        ${cardType === 'city' ? 'cities__image-wrapper' : ''} 
+        `place-card__image-wrapper
+        ${cardType === 'city' ? 'cities__image-wrapper' : ''}
         ${cardType === 'favorite' ? 'favorites__image-wrapper' : ''}
         ${cardType === 'near-places' ? 'near-places__image-wrapper' : ''}`
       }
@@ -90,7 +89,7 @@ function OfferCard({ offer, cardType, updateActiveOffer, clearHoveredOffer, togg
           </div>
           <button
             type="button"
-            className={`place-card__bookmark-button button ${offer.isFavorite ? 'place-card__bookmark-button--active' : ''}`}
+            className={`place-card__bookmark-button button ${offer.isFavorite && authorizationStatus === AuthStatus.Auth ? 'place-card__bookmark-button--active' : ''}`}
             onClick={ () => {
               toggleFavorite(offer);
             } }
@@ -110,7 +109,7 @@ function OfferCard({ offer, cardType, updateActiveOffer, clearHoveredOffer, togg
         <h2 className="place-card__name">
           <Link to={getLinkToOffer(offer.id)}>{offer.title}</Link>
         </h2>
-        <p className="place-card__type">{offer.type}</p>
+        <p className="place-card__type">{capitalizeFirstLetter(offer.type)}</p>
       </div>
     </article>
   );
