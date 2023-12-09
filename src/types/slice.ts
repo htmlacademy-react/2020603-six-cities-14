@@ -5,7 +5,7 @@ import { UserData } from './user-data';
 import { AuthStatus, LoadingDataStatus } from '../const';
 
 export type UserProcess = {
-  authStatus: typeof AuthStatus;
+  authStatus: AuthStatus;
   userData: UserData;
 }
 
