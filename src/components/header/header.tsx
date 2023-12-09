@@ -1,75 +1,88 @@
-import { Link } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks';
-import { useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AppRoute, AuthStatus } from '../../const';
 import { logoutAction } from '../../store/api-actions';
-import { getAuthorizationStatus } from '../../store/autorization-status-data/selectors';
-import { getUserInfo } from '../../store/user-data/selectors';
-import { getFavorites } from '../../store/favorites-data/selectors';
-import { updateUserInfo } from '../../store/user-data/user-data';
-import { updateFavoriteOffers } from '../../store/favorites-data/favorites-data';
+import { getAuthStatus, getUserData } from '../../store/users-process/user-process-selectors';
+import { getFavs } from '../../store/offer-data/offer-data-selectors';
 
-export default function Header(): JSX.Element {
-  const authorizationStatus = useSelector(getAuthorizationStatus);
-  const userInfoData = useSelector(getUserInfo);
-  const favoritesInfo = useSelector(getFavorites);
+type HeaderProps = {
+  block?: 'hasNavigation' | 'noNavigation';
+}
 
+export default function Header({block}: HeaderProps): JSX.Element {
+  const { pathname } = useLocation();
   const dispatch = useAppDispatch();
+  const favs = useAppSelector(getFavs);
+  const userData = useAppSelector(getUserData);
+  const authStatus = useAppSelector(getAuthStatus);
+  const isMain = pathname === AppRoute.Main as string;
+  const link = isMain ? '' : AppRoute.Main;
 
-  const handleLogout = () => {
+  function handleSignOutClick(event: React.MouseEvent) {
+    event.preventDefault();
     dispatch(logoutAction());
-    dispatch(updateUserInfo(null));
-    dispatch(updateFavoriteOffers([]));
-  };
+  }
 
   return (
     <header className="header">
       <div className="container">
-        <div className="header__wrapper" data-testid="header__id">
+        <div className="header__wrapper">
           <div className="header__left">
-            <Link to={AppRoute.Main} className="header__logo-link header__logo-link--active">
+            <Link
+              className={`header__logo-link ${isMain ? 'header__logo-link--active' : ''}`}
+              to={link}
+            >
               <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
             </Link>
           </div>
-          <div className="visually-hidden">Header</div>
-          {authorizationStatus === AuthStatus.Auth &&
+          {
+            block === 'hasNavigation' && authStatus === AuthStatus.Auth &&
             <nav className="header__nav">
               <ul className="header__nav-list">
-                {userInfoData &&
-                  <li className="header__nav-item user">
-                    <div
-                      style={{backgroundImage: `url(${userInfoData.avatarUrl})`}}
-                      className="header__avatar-wrapper user__avatar-wrapper"
-                    >
-                    </div>
-                    <Link to={AppRoute.Favorites} className="header__nav-link header__nav-link--profile">
-                      <span className="header__user-name user__name">
-                        {userInfoData.email}
-                      </span>
-                    </Link>
-                    <span className="header__favorite-count">
-                      {favoritesInfo.length}
-                    </span>
-                  </li>}
-                <li className="header__nav-item">
-                  <span className="header__nav-link is-clickable" onClick={handleLogout}>
-                    <span className="header__signout">Sign out</span>
-                  </span>
-                </li>
+                {
+                  userData &&
+                  <>
+                    <li className="header__nav-item user">
+                      <Link className="header__nav-link header__nav-link--profile" to={userData ? AppRoute.Favorite : AppRoute.Login}>
+                        <div style={{ backgroundImage: `url(${userData.avatarUrl})`, borderRadius: '50%' }} className="header__avatar-wrapper user__avatar-wrapper">
+                        </div>
+                        <span className="header__user-name user__name header__login">{userData ? userData.email : 'Sign in'}</span>
+                        <span className="header__favorite-count">{favs.length}</span>
+                      </Link>
+                    </li>
+
+                    <li className="header__nav-item">
+                      <Link
+                        className="header__nav-link"
+                        to="/"
+                        onClick={handleSignOutClick}
+                      >
+                        <span
+                          className="header__signout"
+                        >
+                          Sign out
+                        </span>
+                      </Link>
+                    </li>
+                  </>
+                }
+
               </ul>
-            </nav>}
-          {authorizationStatus === AuthStatus.NoAuth &&
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <Link to={AppRoute.Login} className="header__nav-link header__nav-link--profile">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__login">Sign in</span>
+            </nav>
+          }
+          {
+            block === 'hasNavigation' && authStatus === AuthStatus.NoAuth &&
+            <nav className='header__nav'>
+              <ul className='header__nav-list'>
+                <li className='header__nav-item user'>
+                  <Link to={AppRoute.Login} className='header__nav-link header__nav-link--profile'>
+                    <div className='header__avatar-wrapper user__avatar-wrapper'></div>
+                    <span className='header__login'>Sign in</span>
                   </Link>
                 </li>
               </ul>
-            </nav>}
+            </nav>
+          }
         </div>
       </div>
     </header>

@@ -1,79 +1,88 @@
-import useMap from '../../hooks/use-map';
-import leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useRef, useEffect, useMemo } from 'react';
-import { MarkerUrl } from '../../const';
-import { Offer, City } from '../../types';
+import leaflet from 'leaflet';
+import { useMap } from '../../hooks/useMap';
+import { useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Offer } from '../../types/offer';
+import { Location } from '../../types/location';
+import { AppRoute, URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '../../const';
 
-export type MapProps = {
+type MapProps = {
+  mapType: 'cities' | 'offer';
   offers: Offer[];
-  activeOffer: Offer;
-  hoveredOffer?: Offer | null;
-  isOfferPage?: boolean;
-  type: string;
-  isActiveOfferOrange?: boolean;
+  offerId: Offer['id'] | null;
 }
 
 const defaultCustomIcon = leaflet.icon({
-  iconUrl: MarkerUrl.Default,
-  iconSize: [27, 39],
-  iconAnchor: [13, 39],
+  iconUrl: URL_MARKER_DEFAULT,
+  iconSize: [40, 40],
+  iconAnchor: [20, 40]
 });
 
 const currentCustomIcon = leaflet.icon({
-  iconUrl: MarkerUrl.Active,
-  iconSize: [27, 39],
-  iconAnchor: [13, 39],
+  iconUrl: URL_MARKER_CURRENT,
+  iconSize: [40, 40],
+  iconAnchor: [20, 40]
 });
 
-export default function Map({ offers, activeOffer, hoveredOffer, isOfferPage, type, isActiveOfferOrange }: MapProps): JSX.Element {
-  const firstOffer = activeOffer;
+export default function Map({ mapType, offers, offerId }: MapProps): JSX.Element {
 
-  const place: City = {
-    name: firstOffer.title,
-    location: {
-      latitude: firstOffer.city.location.latitude,
-      longitude: firstOffer.city.location.longitude,
-      zoom: firstOffer.city.location.zoom,
-    }
-  };
-
+  const { pathname } = useLocation();
+  const location: Location = offers[0]?.city.location;
+  const isOfferPage = pathname.startsWith(AppRoute.Offer);
   const mapRef = useRef(null);
-  const map = useMap(mapRef, place);
+  const map = useMap(mapRef, location);
 
-  const currentIconType = isActiveOfferOrange ? currentCustomIcon : defaultCustomIcon;
-  const city = useMemo(() => offers[0].city.name, [offers]);
+  useEffect(() => {
+    if (map && location) {
+      map.setView({
+        lat: location.latitude,
+        lng: location.longitude,
+      });
+
+    }
+  }, [map, location]);
 
   useEffect(() => {
     if (map) {
-      map.eachLayer((layer: leaflet.Layer & { _icon?: unknown}) => {
-        if(layer._icon) {
-          layer.remove();
-        }
-      });
+      const markerLayer = leaflet.layerGroup().addTo(map);
 
       offers.forEach((offer) => {
-        leaflet.marker({
+        const marker = leaflet.marker({
           lat: offer.location.latitude,
-          lng: offer.location.longitude,
-        }, {
-          icon: ((offer.id === hoveredOffer?.id) || (isOfferPage && offer.id === activeOffer?.id)) ? currentIconType : defaultCustomIcon,
-        })
-          .addTo(map);
+          lng: offer.location.longitude
+        });
+
+        marker
+          .setIcon(
+            offerId !== undefined && offer.id === offerId
+              ? currentCustomIcon
+              : defaultCustomIcon
+          )
+          .addTo(markerLayer)
+          .bindPopup(`<h2>${offer.title}</h2><p style="font-size:1.5em">€${offer.price}</p>`);
       });
 
+      return () => {
+        map.removeLayer(markerLayer);
+      };
     }
-  }, [map, offers, activeOffer, isOfferPage, hoveredOffer, currentIconType]);
-
-
-  useEffect(() => {
-    if (map) {
-      map.setView([activeOffer.city.location.latitude, activeOffer.city.location.longitude], activeOffer.city.location.zoom);
-    }
-  }, [city]);
+  }, [map, offers, offerId, isOfferPage, mapType]);
 
   return (
-    <section data-testid="map__id" ref={mapRef} className={`map ${type === 'city' ? 'cities__map' : 'offer__map'}`}>
+    <section
+      className={`${mapType}__map map`}
+      ref={mapRef}
+      style={mapType === 'offer' ?
+        {
+          height: '100%',
+          minHeight: '600px',
+          width: '60%',
+          minWidth: '1144px',
+          margin: '0 auto'
+        }
+        : undefined}
+    >
     </section>
   );
 }

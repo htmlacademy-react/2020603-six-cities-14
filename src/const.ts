@@ -1,36 +1,44 @@
-import { Review } from './types';
+import { ActiveCity } from './types/city';
 
+export const BASE_URL = 'https://14.design.pages.academy/six-cities';
 export const REQUEST_TIMEOUT = 5000;
-export const ERROR_STATUS_CODE = 404;
-export const ERROR_ROUTE = '404';
-export const COMMENT_MIN_LENGTH = 50;
-export const COMMENT_MAX_LENGTH = 300;
-export const COMMENTS_MAX_COUNT = 10;
-export const OFFERS_NEARBY_MAX_COUNT = 3;
-export const PHOTOS_IN_GALLERY_MAX_COUNT = 6;
+export const TIMEOUT_SHOW_ERROR = 2000;
+export const MIN_COMMENT_LENGTH = 50;
+export const MAX_COMMENT_LENGTH = 300;
+export const MAX_REVIEWS_COUNT = 10;
+export const URL_MARKER_DEFAULT = '../markup/img/pin.svg';
+export const URL_MARKER_CURRENT = '../markup/img/pin-active.svg';
 
-export const cities = [
+export const cities: ActiveCity[] = [
   'Paris',
   'Cologne',
   'Brussels',
   'Amsterdam',
   'Hamburg',
   'Dusseldorf',
-] as const;
+];
+
+export enum NameSpace {
+  Data = 'DATA',
+  App = 'APP',
+  User = 'USER',
+}
 
 export enum AppRoute {
   Main = '/',
   Login = '/login',
-  Favorites = '/favorites',
+  Favorite = '/favorites',
   Offer = '/offer/',
+  NotFound = '/*',
 }
 
-export enum NameSpace {
-  Offers = 'OFFERS',
-  City = 'CITY',
-  AuthorizationStatus = 'AUTORIZATION_STATUS',
-  User = 'USER',
-  Favorites = 'FAVORITES',
+export enum APIRoute {
+  Offers = '/offers',
+  Login = '/login',
+  Logout = '/logout',
+  SelectedOffer = '/offers/',
+  Reviews = '/comments/',
+  Favorite = '/favorite',
 }
 
 export enum AuthStatus {
@@ -39,21 +47,24 @@ export enum AuthStatus {
   Unknown = 'UNKNOWN',
 }
 
-export type CityName = typeof cities[number];
-
-export enum MarkerUrl {
-  Default = 'src/static/pin.svg',
-  Active = 'src/static/pin-active.svg',
+export enum LoadingDataStatus {
+  Unsent = 'UNSENT',
+  Pending = 'PENDING',
+  Success = 'SUCCESS',
+  Error = 'ERROR',
 }
 
-export enum SortingOption {
-  Popular = 'Popular',
-  PriceLowToHigh = 'Price: low to high',
-  PriceHighToLow = 'Price: high to low',
-  TopRatedFirst = 'Top rated first',
-}
+export const SortingOption = {
+  Popular: 'Popular',
+  PriceLowToHigh: 'Price: low to high',
+  PriceHighToLow: 'Price: high to low',
+  TopRatedFirst: 'Top rated first',
+} as const;
 
-export const EmptyReview: Review = {
-  rating: 0,
-  comment: '',
+export const Assessment = {
+  Perfect: 'perfect',
+  Good: 'good',
+  NotBad: 'not bad',
+  Badly: 'badly',
+  Terribly: 'terribly',
 } as const;

@@ -1,21 +1,19 @@
-import Spinner from '../spinner/spinner';
 import { Navigate } from 'react-router-dom';
-import { AuthStatus } from '../../const';
-import { AppRoute } from '../../const';
+import { AppRoute, AuthStatus } from '../../const';
+import { getAuthStatus } from '../../store/users-process/user-process-selectors';
+import { useAppSelector } from '../../hooks';
 
 type PrivateRouteProps = {
-  authorizationStatus: AuthStatus;
   children: JSX.Element;
+  redirectTo: AppRoute;
 }
 
-export default function PrivateRoute(props: PrivateRouteProps): JSX.Element {
-  const { authorizationStatus, children } = props;
+export default function PrivateRoute({ children, redirectTo }: PrivateRouteProps): JSX.Element {
+  const authStatus = useAppSelector(getAuthStatus);
 
-  return (
-    <>
-      {authorizationStatus === AuthStatus.Unknown && <Spinner></Spinner>}
-      {authorizationStatus === AuthStatus.Auth && children}
-      {authorizationStatus === AuthStatus.NoAuth && <Navigate to={AppRoute.Login}></Navigate>}
-    </>
-  );
+  if (authStatus === AuthStatus.NoAuth) {
+    return <Navigate to={redirectTo} />;
+  }
+
+  return children;
 }
