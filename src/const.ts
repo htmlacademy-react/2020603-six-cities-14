@@ -16,7 +16,7 @@ export const cities: ActiveCity[] = [
   'Amsterdam',
   'Hamburg',
   'Dusseldorf',
-] as const;
+];
 
 export enum NameSpace {
   Data = 'DATA',
