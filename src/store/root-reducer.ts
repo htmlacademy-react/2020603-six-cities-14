@@ -1,15 +1,11 @@
-import { NameSpace } from '../const';
+import { userProcess } from './users-process/user-process-slice';
 import { combineReducers } from '@reduxjs/toolkit';
-import { autorizationData } from './autorization-status-data/autorization-status';
-import { userInfoData } from './user-data/user-data';
-import { offersData } from './offers-data/offers-data';
-import { cityData } from './city-data/city-data';
-import { favoritesData } from './favorites-data/favorites-data';
+import { appProcess } from './app-process/app-process-slice';
+import { offersData } from './offer-data/offer-data-slice';
+import { NameSpace } from '../const';
 
 export const rootReducer = combineReducers({
-  [NameSpace.Offers]: offersData.reducer,
-  [NameSpace.City]: cityData.reducer,
-  [NameSpace.AuthorizationStatus]: autorizationData.reducer,
-  [NameSpace.User]: userInfoData.reducer,
-  [NameSpace.Favorites]: favoritesData.reducer,
+  [NameSpace.Data]: offersData.reducer,
+  [NameSpace.App]: appProcess.reducer,
+  [NameSpace.User]: userProcess.reducer
 });
