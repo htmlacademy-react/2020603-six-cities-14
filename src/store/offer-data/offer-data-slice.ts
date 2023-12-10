@@ -1,4 +1,3 @@
-import { ReviewType } from '../../types/review';
 import { Offer } from '../../types/offer';
 import { OffersData } from '../../types/slice';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
@@ -22,15 +21,6 @@ export const offersData = createSlice({
   name: NameSpace.Data,
   initialState,
   reducers: {
-    isReviewSending: (state, action: PayloadAction<LoadingDataStatus>) => {
-      state.reviewStatusSending = action.payload;
-    },
-    setReviews: (state, action: PayloadAction<ReviewType[]>) => {
-      state.reviews = action.payload;
-    },
-    setOffers: (state, action: PayloadAction<Offer[]>) => {
-      state.offers = action.payload;
-    },
     updateNearPlaces: (state, action: PayloadAction<Offer>) => {
       const nearOffers = state.nearPlaces.map((place) => {
         if (place.id === action.payload.id) {
@@ -41,7 +31,6 @@ export const offersData = createSlice({
 
       state.nearPlaces = nearOffers;
     },
-
     dropFavOffer: (state, action: PayloadAction<Offer>) => {
       const index = state.favs.findIndex((offer) => offer.id === action.payload.id);
       state.favs.splice(index, 1);
@@ -51,7 +40,6 @@ export const offersData = createSlice({
     },
     updateOffers: (state, action: PayloadAction<Offer>) => {
       const offer = action.payload;
-
       const offers = state.offers.map((item: Offer) => {
         if (item.id === offer.id) {
           item.isFavorite = !item.isFavorite;
@@ -78,7 +66,6 @@ export const offersData = createSlice({
         state.isOffersLoading = false;
         state.hasError = true;
       })
-
       .addCase(fetchSelectedOfferDataAction.pending, (state) => {
         state.offerDataStatusSending = LoadingDataStatus.Pending;
       })
@@ -118,4 +105,4 @@ export const offersData = createSlice({
   }
 });
 
-export const { updateOffers, dropAllFavorites, isReviewSending, setReviews, setOffers, dropFavOffer, addFavOffer, updateNearPlaces } = offersData.actions;
+export const { updateOffers, dropAllFavorites, dropFavOffer, addFavOffer, updateNearPlaces } = offersData.actions;

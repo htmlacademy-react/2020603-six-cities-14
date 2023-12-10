@@ -31,7 +31,6 @@ const options = {
 };
 
 export default function Card({ elementType, offer, onCardHover }: CardProps): JSX.Element {
-
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const authStatus = useAppSelector(getAuthStatus);
@@ -58,7 +57,11 @@ export default function Card({ elementType, offer, onCardHover }: CardProps): JS
   }
 
   return (
-    <article className={`${options[elementType].className}__card place-card`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <article
+      className={`${options[elementType].className}__card place-card`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {
         offer.isPremium &&
         <div className="place-card__mark">
@@ -71,14 +74,14 @@ export default function Card({ elementType, offer, onCardHover }: CardProps): JS
           <img className="place-card__image" src={offer.previewImage} width={options[elementType].width} height={options[elementType].height} alt="Place image" />
         </Link>
       </div>
-      <div className={`${elementType === 'favorite' ? 'favorites__card-info ' : ''}'place-card__info'`}>
+      <div className={`${elementType === 'favorite' ? 'favorites__card-info' : ''} place-card__info`}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{offer.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
-            className={`${(offer.isFavorite && authStatus === AuthStatus.Auth) ? 'place-card__bookmark-button--active ' : ''}place-card__bookmark-button button`}
+            className={`${(offer.isFavorite && authStatus === AuthStatus.Auth) ? 'place-card__bookmark-button--active' : ''} place-card__bookmark-button button`}
             type="button"
             onClick={() => handleFavClick(offer)}
           >
