@@ -1,11 +1,11 @@
 import 'leaflet/dist/leaflet.css';
 import leaflet from 'leaflet';
-import { useMap } from '../../hooks/useMap';
 import { useRef, useEffect } from 'react';
+import { useMap } from '../../hooks/useMap';
 import { useLocation } from 'react-router-dom';
 import { Offer } from '../../types/offer';
 import { Location } from '../../types/location';
-import { AppRoute, URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '../../const';
+import { AppRoute, PlacemarkPath } from '../../const';
 
 type MapProps = {
   mapType: 'cities' | 'offer';
@@ -14,15 +14,15 @@ type MapProps = {
 }
 
 const defaultCustomIcon = leaflet.icon({
-  iconUrl: URL_MARKER_DEFAULT,
-  iconSize: [40, 40],
-  iconAnchor: [20, 40]
+  iconUrl: PlacemarkPath.Default,
+  iconSize: [27, 39],
+  iconAnchor: [13, 39]
 });
 
 const currentCustomIcon = leaflet.icon({
-  iconUrl: URL_MARKER_CURRENT,
-  iconSize: [40, 40],
-  iconAnchor: [20, 40]
+  iconUrl: PlacemarkPath.Active,
+  iconSize: [27, 39],
+  iconAnchor: [13, 39]
 });
 
 export default function Map({ mapType, offers, offerId }: MapProps): JSX.Element {

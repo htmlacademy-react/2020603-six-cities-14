@@ -5,8 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { setError } from '../../../store/app-process/app-process-slice';
 import { clearErrorAction, postCommentAction } from '../../../store/api-actions';
 import { getReviewStatusSending } from '../../../store/offer-data/offer-data-selectors';
-import { MIN_COMMENT_LENGTH } from '../../../const';
-import { MAX_COMMENT_LENGTH } from '../../../const';
+import { CommentLength } from '../../../const';
 import { Assessment } from '../../../const';
 
 export default function ReviewForm(): JSX.Element {
@@ -28,7 +27,7 @@ export default function ReviewForm(): JSX.Element {
     reviewData: { comment, rating: Number(rating) },
     offerId,
   };
-  const isCommentNotValid = (comment.length <= MIN_COMMENT_LENGTH) || (comment.length >= MAX_COMMENT_LENGTH);
+  const isCommentNotValid = (comment.length <= CommentLength.Min) || (comment.length >= CommentLength.Max);
   const isRatingNotValid = Boolean(Number(rating)) === false;
   const isDisabledSubmit = isCommentNotValid || isRatingNotValid || isSending;
 
@@ -99,15 +98,15 @@ export default function ReviewForm(): JSX.Element {
         id="review" name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={comment}
-        minLength={MIN_COMMENT_LENGTH}
-        maxLength={MAX_COMMENT_LENGTH}
+        minLength={CommentLength.Min}
+        maxLength={CommentLength.Max}
         disabled={isSending}
         onChange={handleTextAreaChange}
       >
       </textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
-          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">{MIN_COMMENT_LENGTH} characters</b>.
+          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">{CommentLength.Min} characters</b>.
         </p>
         <button
           className="reviews__submit form__submit button"
